@@ -97,10 +97,11 @@ We recommend installing RVM isolated to a single user's environment.
 
 ## Discourse setup
 
-Create Discourse user:
+Create Discourse (a sudo) user :
 
     # Run these commands as your normal login (e.g. "michael")
     sudo adduser --shell /bin/bash discourse
+    sudo usermod -a -G sudo discourse
 
 Give Postgres database rights to the `discourse` user:
 
