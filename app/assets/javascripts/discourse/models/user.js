@@ -164,6 +164,7 @@ Discourse.User = Discourse.Model.extend({
                                'website',
                                'name',
                                'email_digests',
+                               'track_all_topics',
                                'email_direct',
                                'email_private_messages',
                                'dynamic_favicon',

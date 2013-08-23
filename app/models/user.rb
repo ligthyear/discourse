@@ -639,6 +639,7 @@ end
 #  bio_cooked                    :text
 #  email_private_messages        :boolean          default(TRUE)
 #  email_direct                  :boolean          default(TRUE), not null
+#  track_all_topic               :boolean          default(TRUE), not null
 #  approved                      :boolean          default(FALSE), not null
 #  approved_by_id                :integer
 #  approved_at                   :datetime

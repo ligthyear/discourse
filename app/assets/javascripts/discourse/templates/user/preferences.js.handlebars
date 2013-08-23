@@ -97,6 +97,12 @@
   <div class="control-group other">
     <label class="control-label">{{i18n user.other_settings}}</label>
     <div class="controls">
+      <label>
+        {{view Ember.Checkbox checkedBinding="track_all_topics"}}
+        {{i18n user.track_all_topics}}
+      </label>
+    </div>
+    <div class="controls">
       <label>{{i18n user.auto_track_topics}}</label>
       {{combobox valueAttribute="value" content=autoTrackDurations value=auto_track_topics_after_msecs}}
     </div>
