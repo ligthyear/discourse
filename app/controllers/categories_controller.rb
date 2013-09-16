@@ -3,7 +3,7 @@ require_dependency 'category_serializer'
 class CategoriesController < ApplicationController
 
   before_filter :ensure_logged_in, except: [:index, :show]
-  before_filter :fetch_category, only: [:show, :update, :destroy]
+  before_filter :fetch_category, only: [:show, :update, :destroy, :set_notifications]
   skip_before_filter :check_xhr, only: [:index]
 
   def index
@@ -20,6 +20,19 @@ class CategoriesController < ApplicationController
       format.html { render }
       format.json { render_serialized(@list, CategoryListSerializer) }
     end
+  end
+
+  def set_notifications
+    notification_level = params[:notification_level].to_i 
+
+    CategoryUserPreferences.transaction do
+      rows = CategoryUserPreferences.where(category_id: @category.id, user_id: current_user.id).update_attributes(notification_level: notification_level)
+
+      if rows == 0
+        CategoryUserPreferences.create(user_id: user_id, category_id: category_id, notification_level: notification_level)
+      end
+    end
+    render json: success_json
   end
 
   def show
