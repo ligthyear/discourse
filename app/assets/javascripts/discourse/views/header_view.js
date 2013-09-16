@@ -31,9 +31,13 @@ Discourse.HeaderView = Discourse.View.extend({
     if($li.hasClass('active')) { return hideDropdown(); }
     // otherwhise, mark it as active
     $li.addClass('active');
+
     // hide the other dropdowns
-    $('li', $ul).not($li).removeClass('active');
-    $('.d-dropdown').not($dropdown).fadeOut('fast');
+    if ($html.data('hide-dropdown')) {
+      // first properly hide any open ones
+      $html.data('hide-dropdown')()
+    }
+    
     // fade it fast
     $dropdown.fadeIn('fast');
     // autofocus any text input field

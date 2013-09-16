@@ -4,12 +4,25 @@
       {{each availableNavItems itemViewClass="Discourse.NavItemView"}}
     </ul>
 
-    {{#if canCreateTopic}}
-      <button class='btn btn-default' {{action createTopic}}><i class='icon icon-plus'></i>{{createTopicText}}</button>
-    {{/if}}
+    
+    {{#if category}}
 
-    {{#if canEditCategory}}
-      <button class='btn btn-default' {{action editCategory category}}>{{i18n category.edit_long}}</button>
+        <div class="clearfix" id="category-preferences-wrap">
+          <button class="btn btn-default" id="category-preference-toggle" data-dropdown="category-preferences-dropdown" {{action showDropdown}}><i class="icon-cog"></i></button>
+          <section id="category-preferences-dropdown" class="d-dropdown">
+            <ul>
+              <li></li>
+              {{#if canEditCategory}}
+                <li>
+                  <button class='btn btn-default' {{action editCategory category}}>{{i18n category.edit_long}}</button>
+                </li>
+              {{/if}}
+            </ul>
+          </section>
+        {{#if canCreateTopic}}
+          <button class='btn btn-default' {{action createTopic}}><i class='icon icon-plus'></i>{{createTopicText}}</button>
+        {{/if}}
+      </div>
     {{/if}}
 
     {{#if canCreateCategory}}

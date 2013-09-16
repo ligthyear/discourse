@@ -24,6 +24,38 @@ Discourse.ListController = Discourse.Controller.extend({
     });
   }.property(),
 
+
+  showDropdown: function() {
+    var $target = $('#category-preference-toggle'),
+        elementId = $target.data('dropdown'),
+        $dropdown = $("#" + elementId),
+        $html = $('html');
+
+    var hideDropdown = function() {
+      $target.removeClass("active");
+      $dropdown.fadeOut('fast');
+      $html.data('hide-dropdown', null);
+      return $html.off('click.d-dropdown');
+    };
+
+    // if a dropdown is active and the user clicks on it, close it
+    if($target.hasClass('active')) { return hideDropdown(); }
+    // otherwhise, mark it as active
+    $target.addClass('active');
+
+    // hide any others
+    if ($html.data('hide-dropdown')) {
+      $html.data('hide-dropdown')()
+    }
+
+    // fade it fast
+    $dropdown.fadeIn('fast');
+
+    $html.data('hide-dropdown', hideDropdown);
+
+    return false;
+  },
+
   createTopicText: function() {
     if (this.get('category.name')) {
       return I18n.t("topic.create_in", {
