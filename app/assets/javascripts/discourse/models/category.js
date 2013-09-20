@@ -85,6 +85,14 @@ Discourse.Category = Discourse.Model.extend({
     this.get("availableGroups").addObject(permission.group_name);
   },
 
+  updateNotifications: function(v) {
+    this.set('notification_level', v);
+    return Discourse.ajax("/category/" + (this.get('id')) + "/notifications", {
+      type: 'POST',
+      data: { notification_level: v }
+    });
+  },
+
   // note, this is used in a data attribute, data attributes get downcased
   //  to avoid confusion later on using this naming here.
   description_text: function(){

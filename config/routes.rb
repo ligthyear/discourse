@@ -191,7 +191,7 @@ Discourse::Application.routes.draw do
   get 'category/:category.rss' => 'list#category_feed', format: :rss, as: 'category_feed'
   get 'category/:category' => 'list#category', as: 'category_list'
   get 'category/:category/more' => 'list#category', as: 'category_list_more'
-
+  post 'category/:id/notifications' => 'categories#set_notifications' , constraints: {topic_id: /\d+/}
   # We've renamed popular to latest. If people access it we want a permanent redirect.
   get 'popular' => 'list#popular_redirect'
   get 'popular/more' => 'list#popular_redirect'

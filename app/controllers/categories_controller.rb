@@ -25,12 +25,12 @@ class CategoriesController < ApplicationController
   def set_notifications
     notification_level = params[:notification_level].to_i 
 
-    CategoryUserPreferences.transaction do
-      rows = CategoryUserPreferences.where(category_id: @category.id, user_id: current_user.id).update_attributes(notification_level: notification_level)
+    puts "#{@category.id} #{notification_level}"
 
-      if rows == 0
-        CategoryUserPreferences.create(user_id: user_id, category_id: category_id, notification_level: notification_level)
-      end
+    CategoryUserPreferences.transaction do
+      preferences = CategoryUserPreferences.where(category_id: @category.id, user_id: current_user.id).first_or_create
+      preferences.notification_level = notification_level
+      preferences.save!
     end
     render json: success_json
   end
