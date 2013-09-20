@@ -11,7 +11,9 @@
           <button class="btn btn-default" id="category-preference-toggle" data-dropdown="category-preferences-dropdown" {{action showDropdown}}><i class="icon-cog"></i></button>
           <section id="category-preferences-dropdown" class="d-dropdown">
             <ul>
-              <li></li>
+              <li>
+              {{view Discourse.CategoryNotificationsButton modelBinding="category"}}
+              </li>
               {{#if canEditCategory}}
                 <li>
                   <button class='btn btn-default' {{action editCategory category}}>{{i18n category.edit_long}}</button>
