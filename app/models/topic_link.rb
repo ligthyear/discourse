@@ -166,7 +166,9 @@ class TopicLink < ActiveRecord::Base
           if topic_id.present?
             topic = Topic.find_by(id: topic_id)
 
-            if topic && post.topic && post.topic.archetype != 'private_message' && topic.archetype != 'private_message'
+            if topic && post.topic &&
+                Archetype.is_capable?(post.topic.archetype, :linkable) &&
+                Archetype.is_capable?(topic.archetype, :linkable)
 
               prefix = Discourse.base_url
 
