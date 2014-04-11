@@ -36,6 +36,7 @@
 //= require_tree ./discourse/components
 //= require_tree ./discourse/views
 //= require_tree ./discourse/helpers
+//= require ./template_injectors
 //= require_tree ./discourse/templates
 //= require_tree ./discourse/routes
 //= require_tree ./discourse/initializers

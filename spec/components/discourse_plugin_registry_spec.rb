@@ -29,6 +29,13 @@ describe DiscoursePluginRegistry do
     end
   end
 
+  context '#template_injectors' do
+    it 'defaults to an empty Set' do
+      registry.template_injectors = nil
+      registry.template_injectors.should == Set.new
+    end
+  end
+
   context '#server_side_javascripts' do
     it 'defaults to an empty Set' do
       registry.server_side_javascripts = nil

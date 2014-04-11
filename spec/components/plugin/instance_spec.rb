@@ -91,6 +91,18 @@ describe Plugin::Instance do
       DiscoursePluginRegistry.server_side_javascripts.count.should == 0
     end
 
+    it "registers template injector properly" do
+      plugin = Plugin::Instance.new nil, "/tmp/test.rb"
+      plugin.register_asset("inject_tmpls.js", :template_injector)
+
+      plugin.send :register_assets!
+
+      DiscoursePluginRegistry.template_injectors.count.should == 1
+      DiscoursePluginRegistry.admin_javascripts.count.should == 0
+      DiscoursePluginRegistry.javascripts.count.should == 0
+      DiscoursePluginRegistry.server_side_javascripts.count.should == 0
+    end
+
     it "registers server side javascript properly" do
       plugin = Plugin::Instance.new nil, "/tmp/test.rb"
       plugin.register_asset("my_admin.js", :server_side)

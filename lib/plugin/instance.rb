@@ -234,6 +234,8 @@ class Plugin::Instance
       if asset =~ /\.js$|\.js\.erb$|\.js\.es6$/
         if opts == :admin
           DiscoursePluginRegistry.admin_javascripts << asset
+        elsif opts == :template_injector
+          DiscoursePluginRegistry.template_injectors << asset
         else
           if opts == :server_side
             DiscoursePluginRegistry.server_side_javascripts << asset

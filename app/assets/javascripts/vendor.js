@@ -3,6 +3,7 @@
 //= require ./discourse/lib/probes.js
 
 //= require handlebars.js
+//= require ember-handlebars-injector.js
 //= require jquery_include.js
 //= require ember_include.js
 

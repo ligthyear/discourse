@@ -42,6 +42,10 @@ class DiscoursePluginRegistry
       @sass_variables ||= Set.new
     end
 
+    def template_injectors
+      @template_injectors ||= Set.new
+    end
+
     def handlebars
       @handlebars ||= Set.new
     end
@@ -89,6 +93,10 @@ class DiscoursePluginRegistry
     self.class.handlebars
   end
 
+  def template_injectors
+    self.class.template_injectors
+  end
+
   def self.clear
     self.javascripts = nil
     self.server_side_javascripts = nil
@@ -97,6 +105,7 @@ class DiscoursePluginRegistry
     self.desktop_stylesheets = nil
     self.sass_variables = nil
     self.handlebars = nil
+    self.template_injectors = nil
   end
 
   def self.setup(plugin_class)
