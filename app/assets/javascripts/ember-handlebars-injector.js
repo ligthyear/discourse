@@ -52,6 +52,47 @@
         return _find_in_tree(query, statements);
     }
 
+    function _print_tree(listing, path){
+        var typecounts = {},
+            path = path || "";
+
+        function subtree(idx, type, lst){
+            var typecount = typecounts[type] || 0,
+                me = type + "[" + typecount + "]",
+                mypath = path + " " + me;
+
+            console.log("[" + idx + "] #" + me);
+            console.group("Path:" + mypath);
+            _print_tree(lst, mypath);
+            typecounts[type] = typecount + 1;
+        }
+
+        for (var i = 0; i < listing.length; i++){
+            var item = listing[i];
+            if (item.mustache) {
+                var type = item.mustache.id.original;
+                subtree(i, type, item.program.statements);
+                if (item.inverse){
+                    var type = type + "-else";
+                    subtree(i, type, item.inverse.statements);
+                }
+
+            } else if (item.type == "mustache") {
+                console.log("[" + i + "] {{" + item.id.original);
+            } else {
+                var target_string = item.string.trim();
+                var breaker = target_string.indexOf("\n");
+                target_string = target_string.slice(0, breaker > 17 ? 17: breaker);
+                if (item.string.length > target_string.length){
+                    target_string += " ...";
+                }
+                console.log("[" + i + "] " + target_string);
+            }
+        }
+        console.groupEnd();
+
+    }
+
 
     var originalParse = Handlebars.parse;
     var Patcher = function(){};
@@ -59,8 +100,11 @@
         parse: function(string){
             var ast = originalParse(string),
                 hash = md5(string);
-            if (DEBUG && finder.length && string.indexOf(finder) !== -1)
-                    console.log("Finder found in " + hash + "\n", string);
+            if (DEBUG && finder.length && string.indexOf(finder) !== -1) {
+                console.log("Finder found in " + hash + "\n", string);
+                window.TemplatePatcher.printTree(ast);
+                console.log(ast, patchers[hash]);
+            }
             if (patchers[hash]){
                 for(var i=0; i < patchers[hash].length; i++ ) {
                     try {
@@ -74,6 +118,10 @@
                 }
             }
             return ast;
+        },
+        printTree: function(ast) {
+            console.log("Tree");
+            _print_tree(ast.statements);
         },
         addGeneralPatcher: function(hashes, cb){
             if (typeof hashes === "string") hashes = [hashes];
