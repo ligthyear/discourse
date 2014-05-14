@@ -50,8 +50,21 @@ Discourse.Topic = Discourse.Model.extend({
     if (slug.trim().length === 0) {
       slug = "topic";
     }
-    return Discourse.getURL("/t/") + slug + "/" + (this.get('id'));
+    return Discourse.getURL("/t/") + this.get("urlFiller") + slug + "/" + (this.get('id'));
   }.property('id', 'slug'),
+
+  urlFillerData: function(){
+    return ["category", "isPrivateMessage"];
+  }.property(),
+
+  urlFiller: function(){
+    if (!Discourse.SiteSettings.custom_topic_url_filler) return "";
+    var context = {topic: this};
+    this.get("urlFillerData").forEach(function(name){
+      context[name] = this.get(name);
+    }.bind(this));
+    return Handlebars.compile(Discourse.SiteSettings.custom_topic_url_filler)(context);
+  }.property('id', 'category'),
 
   // Helper to build a Url with a post number
   urlForPostNumber: function(postNumber) {

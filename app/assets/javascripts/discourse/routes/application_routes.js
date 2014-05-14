@@ -14,7 +14,7 @@ Discourse.Route.buildRoutes(function() {
   });
 
   // Topic routes
-  this.resource('topic', { path: '/t/:slug/:id' }, function() {
+  this.resource('topic', { path: '/*t/:slug/:id' }, function() {
     this.route('fromParams', { path: '/' });
     this.route('fromParamsNear', { path: '/:nearPost' });
   });

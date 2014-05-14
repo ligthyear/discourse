@@ -602,6 +602,11 @@ uncategorized:
   sequential_replies_threshold: 2
   dominating_topic_minimum_percent: 20
 
+  # custom url
+  custom_topic_url_filler:
+    default:
+    client: true
+
   global_notice:
     default: ""
     client: true
