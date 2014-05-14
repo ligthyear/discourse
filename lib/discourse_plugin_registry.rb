@@ -11,6 +11,7 @@ class DiscoursePluginRegistry
     attr_accessor :mobile_stylesheets
     attr_accessor :desktop_stylesheets
     attr_accessor :sass_variables
+    attr_accessor :template_injectors
     attr_accessor :handlebars
 
     # Default accessor values
