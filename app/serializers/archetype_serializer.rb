@@ -1,6 +1,6 @@
 class ArchetypeSerializer < ApplicationSerializer
 
-  attributes :id, :name, :options
+  attributes :id, :name, :slug, :options
 
   def options
     object.options.keys.collect do |k|
@@ -15,6 +15,14 @@ class ArchetypeSerializer < ApplicationSerializer
 
   def name
     I18n.t("archetypes.#{object.id}.title")
+  end
+
+  def slug
+    begin
+      SiteSetting.send("archetypes.#{object.id}.slug") || object.id
+    rescue NoMethodError
+      object.id
+    end
   end
 
 end
