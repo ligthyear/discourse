@@ -19,7 +19,7 @@ class ArchetypeSerializer < ApplicationSerializer
 
   def slug
     begin
-      SiteSetting.send("archetypes.#{object.id}.slug") || object.id
+      SiteSetting.send("archetypes_#{object.id}_slug") || object.id
     rescue NoMethodError
       object.id
     end

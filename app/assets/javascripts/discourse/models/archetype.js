@@ -19,4 +19,10 @@ Discourse.Archetype = Discourse.Model.extend({
 
 });
 
+Discourse.Archetype.reopenClass({
+  getSlug: function(id){
+    return Discourse.Site.currentProp("archetypes").findBy("id", id).slug;
+  }
+});
+
 

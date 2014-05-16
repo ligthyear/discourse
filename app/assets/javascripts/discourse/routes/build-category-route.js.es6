@@ -1,8 +1,12 @@
 // A helper function to create a category route with parameters
 export default function(filter, params) {
+  var archetype = params.archetype || '';
   return Discourse.Route.extend({
     model: function(modelParams) {
-      return Discourse.Category.findBySlug(modelParams.slug, modelParams.parentSlug);
+      Discourse.Category.setArchetype(archetype);
+      var model = Discourse.Category.findBySlug(modelParams.slug, modelParams.parentSlug);
+      model.set("archetype", archetype);
+      return model;
     },
 
     afterModel: function(model, transaction) {
@@ -19,15 +23,16 @@ export default function(filter, params) {
 
     _setupNavigation: function(model) {
       var noSubcategories = params && !!params.no_subcategories,
-          filterMode = "category/" + Discourse.Category.slugFor(model) + (noSubcategories ? "/none" : "") + "/l/" + filter;
-
-      this.controllerFor('navigation/category').setProperties({
-        category: model,
-        filterMode: filterMode,
-        noSubcategories: params && params.no_subcategories,
-        canEditCategory: Discourse.User.currentProp('staff'),
-        canChangeCategoryNotificationLevel: Discourse.User.current()
-      });
+          filterMode = "category/" + Discourse.Category.slugFor(model) + (noSubcategories ? "/none" : "") + "/l/" + filter,
+          opts = {
+              category: model,
+              filterMode: filterMode,
+              noSubcategories: params && params.no_subcategories,
+              canEditCategory: Discourse.User.currentProp('staff'),
+              canChangeCategoryNotificationLevel: Discourse.User.current()
+            };
+      if (archetype) opts.archetype = archetype;
+      this.controllerFor('navigation/category').setProperties(opts);
     },
 
     _createSubcategoryList: function(model) {

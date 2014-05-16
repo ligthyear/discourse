@@ -61,7 +61,6 @@ class Archetype
     @archetypes[name] = archetype
     if archetype.options.has_key? :capabilities
       archetype.options[:capabilities].each do |cap|
-        puts cap, name
         register_capability(cap, name)
       end
     end

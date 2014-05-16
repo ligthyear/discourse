@@ -22,8 +22,8 @@ Discourse.Route.buildRoutes(function() {
     this.route('fromParamsNear', { path: '/:nearPost' });
   });
 
-  this.resource('discovery', { path: '/' }, function() {
-    router = this;
+  function discoverer() {
+    var router = this;
 
     // top
     this.route('top');
@@ -57,6 +57,34 @@ Discourse.Route.buildRoutes(function() {
 
     // homepage
     this.route(Discourse.Utilities.defaultHomepage(), { path: '/' });
+  }
+
+  this.resource('discovery', { path: '/' }, discoverer);
+
+
+  var discoveryRoutes = [],
+      discoveryTemplates = [];
+
+  for (var name in Discourse) {
+    if (name.indexOf("Discovery") === 0) discoveryRoutes.push(name.slice(9));
+  }
+
+  for (var tmpl in Ember.TEMPLATES) {
+    if (tmpl.indexOf("discovery") === 0) discoveryTemplates.push(tmpl.slice(9));
+  }
+
+  Discourse.Site.currentProp('archetypes').forEach(function(arch){
+    // once we i18n strings, use them
+    router.resource('arch' + arch.id, {path: '/' + arch.slug}, discoverer);
+
+    discoveryRoutes.forEach(function(route){
+      Discourse['Arch' + arch.id + route] = Discourse["Discovery" + route].extend({
+          archetype_filter: arch.id
+      });
+    });
+    discoveryTemplates.forEach(function(tmpl){
+        Ember.TEMPLATES['arch' + arch.id + tmpl] = Ember.TEMPLATES["discovery" + tmpl];
+    });
   });
 
   this.resource('group', { path: '/groups/:name' }, function() {

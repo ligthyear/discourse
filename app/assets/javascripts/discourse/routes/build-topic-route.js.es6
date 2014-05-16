@@ -1,14 +1,16 @@
 // A helper to build a topic route for a filter
-export default function(filter) {
+export default function(filter,archetype) {
   return Discourse.Route.extend({
     queryParams: {
       sort: { replace: true },
       ascending: { replace: true },
-      status: { replace: true }
+      status: { replace: true },
+      archetype: archetype
     },
 
     beforeModel: function() {
-      this.controllerFor('navigation/default').set('filterMode', filter);
+      this.controllerFor('navigation/default').set({'filterMode': filter, archetype: archetype});
+      Discourse.Category.setArchetype(archetype);
     },
 
     model: function(data, transaction) {
@@ -22,6 +24,7 @@ export default function(filter) {
       if (params && params.order) { findOpts.order = params.order; }
       if (params && params.ascending) { findOpts.ascending = params.ascending; }
       if (params && params.status) { findOpts.status = params.status; }
+      if (archetype) { findOpts.archetype = archetype; }
 
 
       return Discourse.TopicList.list(filter, findOpts).then(function(list) {
@@ -38,7 +41,8 @@ export default function(filter) {
 
       controller.setProperties({
         order: Em.get(trans, 'queryParams.order'),
-        ascending: Em.get(trans, 'queryParams.ascending')
+        ascending: Em.get(trans, 'queryParams.ascending'),
+        archetype: archetype
       });
 
       var period = filter.indexOf('/') > 0 ? filter.split('/')[1] : '',

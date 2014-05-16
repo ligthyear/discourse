@@ -34,8 +34,8 @@ Discourse.Category = Discourse.Model.extend({
   }.property('id'),
 
   url: function() {
-    return Discourse.getURL("/category/") + Discourse.Category.slugFor(this);
-  }.property('name'),
+    return Discourse.getURL(this.get("prefix") + "/category/") + Discourse.Category.slugFor(this);
+  }.property('name', 'archetype'),
 
   unreadUrl: function() {
     return this.get('url') + '/l/unread';
@@ -90,6 +90,15 @@ Discourse.Category = Discourse.Model.extend({
   destroy: function() {
     return Discourse.ajax("/categories/" + (this.get('slug') || this.get('id')), { type: 'DELETE' });
   },
+
+  prefix: function(){
+    return this.get("archetypeSlug") ?  "/" + this.get("archetypeSlug") : "";
+  }.property("archetypeSlug"),
+
+  archetypeSlug: function(){
+    var archetype = this.get("archetype");
+    return archetype ? Discourse.Archetype.getSlug(archetype) : "";
+  }.property("archetype"),
 
   addPermission: function(permission){
     this.get("permissions").addObject(permission);
@@ -231,6 +240,12 @@ Discourse.Category.reopenClass({
   // TODO: optimise, slow for no real reason
   findById: function(id){
     return Discourse.Category.list().findBy('id', id);
+  },
+
+  setArchetype: function(archetype) {
+    Discourse.Category.list().forEach(function(cat) {
+      cat.set("archetype", archetype);
+    });
   },
 
   findByIds: function(ids){
