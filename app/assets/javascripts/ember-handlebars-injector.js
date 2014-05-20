@@ -150,7 +150,11 @@
                     target_statements = target[1];
                     pos = target[2] + 1 + shift;
                 } else {
-                    throw "Sorry can't find " + pos + "in" + ast;
+                    if (options && options.throw_exc){
+                        throw "Sorry, position " + pos + " not found";
+                    }
+                    console && console.error("Sorry, can't find " + pos, ast);
+                    return;
                 }
             }
             for (var idx=0; idx < tmpl.statements.length; idx++){
