@@ -52,8 +52,9 @@
         return _find_in_tree(query, statements);
     }
 
-    function _print_tree(listing, path){
+    function _print_tree(listing, path, options){
         var typecounts = {},
+            options = options || {},
             path = path || "";
 
         function subtree(idx, type, lst){
@@ -67,7 +68,7 @@
             typecounts[type] = typecount + 1;
         }
 
-        for (var i = 0; i < listing.length; i++){
+        for (var i = 0, end = options.length || listing.length; i < end ; i++){
             var item = listing[i];
             if (item.mustache) {
                 var type = item.mustache.id.original;
@@ -119,9 +120,9 @@
             }
             return ast;
         },
-        printTree: function(ast) {
+        printTree: function(ast, options) {
             console.log("Tree");
-            _print_tree(ast.statements);
+            _print_tree(ast.statements, "", options);
         },
         addGeneralPatcher: function(hashes, cb){
             if (typeof hashes === "string") hashes = [hashes];
