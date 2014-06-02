@@ -1,10 +1,10 @@
 /* jshint undef: true, unused: true, debug:true */
 /* globals console:false, md5:false */
 (function() {
-    var patchers = {};
-    var finder = '';
-    var DEBUG = false;
-    var re = new RegExp("(.*)\\[(\\d+)\\]$", "g");
+    var patchers = {},
+        finder = '',
+        DEBUG = false,
+        re = new RegExp("(.*)\\[(\\d+)\\]$", "g");
 
     function _find_in_tree(parts, statements) {
         var query = parts.shift(),
@@ -113,6 +113,7 @@
                         if (res){
                             ast = res;
                         }
+                        patchers[hash][i].applied = true;
                     } catch (e) {
                         window.console && console.warn(e);
                     }
@@ -120,10 +121,28 @@
             }
             return ast;
         },
+
         printTree: function(ast, options) {
             console.log("Tree");
             _print_tree(ast.statements, "", options);
         },
+
+        unusedPatches: function(){
+            var unused = [];
+            for (hash in patchers) {
+                for (var i=0; i < patchers[hash].length; i++ ) {
+                    var func = patchers[hash][i];
+                    if (func.applied) continue;
+                    unused.push({
+                        "hash": hash,
+                        "func": func,
+                        "str" : func.name || func.toSource()
+                    });
+                }
+            }
+            return unused;
+        },
+
         addGeneralPatcher: function(hashes, cb){
             if (typeof hashes === "string") hashes = [hashes];
             for (var i=0;i < hashes.length; i++) {
