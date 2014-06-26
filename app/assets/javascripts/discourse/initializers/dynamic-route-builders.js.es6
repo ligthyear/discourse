@@ -1,4 +1,4 @@
-\import buildCategoryRoute from 'discourse/routes/build-category-route';
+import buildCategoryRoute from 'discourse/routes/build-category-route';
 import buildTopicRoute from 'discourse/routes/build-topic-route';
 
 export default {

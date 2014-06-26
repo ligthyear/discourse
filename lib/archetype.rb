@@ -71,7 +71,7 @@ class Archetype
   end
 
   # By default we have a regular archetype
-  register 'regular', capabilities: [:searchable, :shown_publicly, :linkable]
+  register 'regular', capabilities: [:searchable, :shown_publicly, :linkable, :creatible]
   register 'banner', capabilities: [:shown_publicly]
 
 end

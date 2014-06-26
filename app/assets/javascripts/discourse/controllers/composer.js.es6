@@ -14,6 +14,7 @@ export default Discourse.Controller.extend({
 
   showEditReason: false,
   editReason: null,
+  showArchetypes: false,
 
   _initializeSimilar: function() {
     this.set('similarTopics', []);
@@ -23,6 +24,15 @@ export default Discourse.Controller.extend({
     // Toggle the reply view
     toggle: function() {
       this.toggle();
+    },
+
+    selectArchetype: function(archetypeId){
+      this.set("model.archetypeId", archetypeId);
+      this.set("showArchetypes", false);
+    },
+
+    showArchetypes: function(){
+      this.set("showArchetypes", true);
     },
 
     togglePreview: function() {
@@ -78,6 +88,19 @@ export default Discourse.Controller.extend({
   categories: function() {
     return Discourse.Category.list();
   }.property(),
+
+  currentArchetype: function(){
+    return Discourse.Site.currentProp("archetypes").findBy("id", this.get("model.archetypeId"));
+  }.property("model.archetypeId"),
+
+  archetypes: function(){
+    return Discourse.Archetype.getForCapability("creatible");
+  }.property(),
+
+  canSelectArchetype: function(){
+    console.log(this.get("model.action"), this.get("archetypes"));
+    return this.get("model.action") === "createTopic" && this.get("archetypes").length > 1;
+  }.property("model.action", "archetypes"),
 
 
   toggle: function() {
