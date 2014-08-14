@@ -64,7 +64,7 @@ module HasCustomFields
 
 
   def custom_fields
-    @custom_fields ||= refresh_custom_fields_from_db.dup
+    @custom_fields ||= refresh_custom_fields_from_db(false).dup
   end
 
   def custom_fields=(data)
@@ -79,10 +79,10 @@ module HasCustomFields
 
   protected
 
-  def refresh_custom_fields_from_db
+  def refresh_custom_fields_from_db(force=true)
     target = Hash.new
-    _custom_fields.pluck(:name,:value).each do |key, value|
-      self.class.append_custom_field(target, key, value)
+    _custom_fields(force).each do |item|
+      self.class.append_custom_field(target, item.name, item.value)
     end
     @custom_fields_orig = target
     @custom_fields = @custom_fields_orig.dup
